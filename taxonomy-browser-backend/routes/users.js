@@ -21,6 +21,51 @@ userRouter.route('/')
       .catch((err) => next(err));
   });
 
+userRouter.route('/:userId')
+  .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200) })
+  .get(cors.cors, (req, res, next) => {
+    /* pega info do usuario, admins ou proprio usuario only (mas nao sei quao util seria isso ainda) */
+  })
+  .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* desabilitado */
+  })
+  .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* atualiza infos de um usuario, admins ou proprio usuario only */
+  })
+  .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* deleta usuario do BD, admins only */
+  });
+
+userRouter.route('/:userId/groups')
+  .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200) })
+  .get(cors.cors, (req, res, next) => {
+    /* pega todos os grupos aos quais certo usuario participa, admin ou proprio usuario only */
+  })
+  .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* adiciona novo grupo a um usuario, admin only */
+  })
+  .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* altera lista de grupos do usuario?, admin only */
+  })
+  .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* deleta grupos do usuario no DB, admins only */
+  });
+
+userRouter.route('/:userId/groups/:groupId')
+  .options(cors.corsWithOptions, (req, res) => { res.sendStatus(200) })
+  .get(cors.cors, (req, res, next) => {
+    /* pega info de um grupo especifico de um usuario (nao mto util?) */
+  })
+  .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* desabilitado */
+  })
+  .put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* desabilitado */
+  })
+  .delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+    /* deleta grupo do usuario no DB, admins only */
+  });
+
 userRouter.post('/signup', cors.corsWithOptions, (req, res, next) => {
   User.register(new User({ username: req.body.username }),
     req.body.password, (err, user) => {
